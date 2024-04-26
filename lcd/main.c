@@ -14,7 +14,7 @@ void init(void) {
     PORTB |= (1 << PINB5);
     
     usart_init(USART_BAUD_9600);
-    lcd1602_init();
+    lcd1602_init(LCD_DOTS_5x8, LCD_LINES_2);
 }
 
 void loop(void) {

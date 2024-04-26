@@ -4,12 +4,6 @@
 #ifndef _USART_H
 #define _USART_H
 
-
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef enum {
     USART_BAUD_4800,
     USART_BAUD_9600,
@@ -22,9 +16,5 @@ typedef enum {
 void usart_init(USART_BAUD_t baud);
 int usart_putchar(char c, FILE *stream);
 int usart_getchar(FILE *stream);
-
-#ifdef __cplusplus
-}
-#endif /* END __cplusplus */
 
 #endif /* END _USART_H */
