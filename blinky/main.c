@@ -3,7 +3,7 @@
 
 void init(void) {
     // Set user LED direction to output
-    DDRB |= (0x01 << DDB1);
+    DDRB |= (0x01 << DDB5);
     // Set user LED HIGH
     PORTB |= (0x01 << PINB5);
 }
@@ -22,7 +22,8 @@ void blink(void) {
 }
 
 
-void main() {
+int main() {
     init();
     blink();
+    return 1;
 }
