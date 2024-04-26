@@ -6,4 +6,4 @@ This libary has been written for LCD displays that use the HD44780 LCD controlle
 ## Usage
 
 - Adjust pin and address definitions inside of `lcd1602.h` if neccesary
-- Initialize module with `lcd1602_init(UART_BAUD_XXXX)`
+- Initialize module with `lcd1602_init(dots, lines)`

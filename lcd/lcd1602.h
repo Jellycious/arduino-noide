@@ -1,7 +1,10 @@
 #ifndef LCD1602_H_
 #define LCD1602_H_
 
+#include <stdio.h>
+#include <stdbool.h>
 #include <avr/io.h>
+#include <avr/sfr_defs.h>
 
 /* I2C address of LCD display */
 #define LCD_TWI_ADDR 0x27
@@ -40,6 +43,10 @@
 #define LCD_FS_N 3
 #define LCD_FS_F 2
 
+#define LCD_DC_D 2
+#define LCD_DC_C 1
+#define LCD_DC_B 0
+
 /* LCD configurations options */
 typedef enum {
     LCD_DOTS_5x10,
@@ -52,7 +59,8 @@ typedef enum {
 } lcd_lines_t;
 
 void lcd1602_init(lcd_dots_t dots, lcd_lines_t lines);
-void lcd1602_set_cursor(uint8_t pos);
+void lcd1602_set_cursor(uint8_t index, uint8_t line);
+void lcd1602_cursor(bool cursor, bool blinking);
 void lcd1602_write(char c);
 void lcd1602_clear(void);
 void lcd1602_rshift(void);

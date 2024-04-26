@@ -17,8 +17,21 @@ void init(void) {
     lcd1602_init(LCD_DOTS_5x8, LCD_LINES_2);
 }
 
-void loop(void) {
-    lcd1602_set_cursor(0x00);
+void cursor_test(void) {
+    while(1)
+    {
+        for (int i = 0; i < 16; i++) {
+            lcd1602_set_cursor(i, i % 2);
+            lcd1602_cursor(i%2, (i+1)%2);
+            _delay_ms(1000);
+        }
+    }
+}
+
+void writing_test(void) {
+    /* Hide cursor */
+    lcd1602_cursor(false, false);
+    lcd1602_set_cursor(0, 0);
 
     char start = 0xa1;
     char end = 0xdf;
@@ -37,10 +50,14 @@ void loop(void) {
             lcd1602_write(c);
         }
 
-        for(int i = 0; i < 10; i++)
+        lcd1602_set_cursor(0, 0);
+
+        for(int i = 0; i < 16; i++)
         {
             lcd1602_lshift();
-            _delay_ms(800);
+            _delay_ms(1);
+            lcd1602_set_cursor(i, i % 2);
+            _delay_ms(2000);
         }
 
         lcd1602_clear();
@@ -52,6 +69,6 @@ int main() {
     init();
     stdout = stdin = &mystdout;
 
-    loop();
+    writing_test();
     return 1;
 }

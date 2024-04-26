@@ -1,6 +1,5 @@
 #include "lcd1602.h"
 
-#include <avr/sfr_defs.h>
 #include <util/delay.h>
 
 #include "usart.h"
@@ -8,8 +7,8 @@
 
 
 uint8_t BLACKLIGHT_MASK = _BV(LCD_LED_PIN);
-uint8_t COLS = 0x00; 
-bool TWO_LINES = false; 
+
+uint8_t LCD_LINES = 1;
 
 static void _pcf8574_write(uint8_t d);
 static void _send_command(uint8_t command, bool rs, bool rw);
@@ -34,10 +33,14 @@ void lcd1602_init(lcd_dots_t dots, lcd_lines_t lines){
     }
     if(lines == LCD_LINES_2) {
         /* Set flag for 2 lines */
+        LCD_LINES = 2;
         function_set |= _BV(LCD_FS_N);
     }
 
     _send_command(function_set, 0, 0);
+
+    /* Set cursor increment and don't accompany display shift */
+    _send_command(0x06, 0, 0);
 
     /* Turn on display, cursor blinking and cursor character */
     _send_command(0x0f, 0, 0);
@@ -46,8 +49,17 @@ void lcd1602_init(lcd_dots_t dots, lcd_lines_t lines){
     lcd1602_clear();
 };
 
-/* Set cursor position */
-void lcd1602_set_cursor(uint8_t pos) {
+/*
+ * Set cursor position
+ *
+ * index: where to place cursor
+ * line: which line to place cursor
+ *
+ *
+ */
+void lcd1602_set_cursor(uint8_t index, uint8_t line) {
+    uint8_t pos = (index % 0x40) + ((line % LCD_LINES) * 0x40);
+
     uint8_t command = (pos & 0b01111111) | _BV(LCD_D7_PIN);
     _send_command(command, 0, 0);
 }
@@ -72,6 +84,12 @@ void lcd1602_clear(void) {
     _send_command(0x01, 0, 0);
     /* Wait, because clearing screen takes longer */
     _delay_us(1600);
+}
+
+/* Turn on/off cursor and cursor blinking */
+void lcd1602_cursor(bool cursor, bool blinking) {
+    uint8_t command = _BV(3) | _BV(LCD_DC_D) | (cursor << LCD_DC_C) | (blinking << LCD_DC_B);
+    _send_command(command, 0, 0);
 }
 
 /* Turn on/off LCD blacklight */
