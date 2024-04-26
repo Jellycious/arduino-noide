@@ -23,9 +23,10 @@ void loop(void) {
 }
 
 
-void main() {
+int main() {
     init();
     stdout = stdin = &mystdout;
 
     loop();
+    return 1;
 }
